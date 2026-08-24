@@ -4,8 +4,25 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using MyWebApi.Api.Services;
+using Prometheus;
+using Serilog;
+using Serilog.Sinks.Grafana.Loki;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Host.UseSerilog((context, configuration) =>
+{
+    configuration
+        .MinimumLevel.Information()
+        .Enrich.WithProperty("Application", "MyWebApi")
+        .WriteTo.Console()
+        .WriteTo.GrafanaLoki(
+            "http://localhost:3101",
+            labels: new[]
+            {
+                new Serilog.Sinks.Grafana.Loki.LokiLabel { Key = "app", Value = "mywebapi" }
+            });
+});
 
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
@@ -86,10 +103,13 @@ if (app.Environment.IsDevelopment())
     });
 }
 
-
+app.UseSerilogRequestLogging();
 app.UseHttpsRedirection();
+app.UseHttpMetrics();
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
+app.MapMetrics();
+
 
 app.Run();

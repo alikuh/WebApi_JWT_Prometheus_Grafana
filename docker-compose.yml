@@ -1,0 +1,35 @@
+services:
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: mywebapi-prometheus
+    ports:
+      - "9091:9090"
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    networks:
+      - telemetry
+
+  loki:
+    image: grafana/loki:latest
+    container_name: mywebapi-loki
+    ports:
+      - "3101:3100"
+    command: -config.file=/etc/loki/local-config.yaml
+    networks:
+      - telemetry
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: mywebapi-grafana
+    ports:
+      - "3001:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    volumes:
+      - ./grafana/provisioning:/etc/grafana/provisioning  
+    networks:
+      - telemetry
+
+networks:
+  telemetry:
+    driver: bridge

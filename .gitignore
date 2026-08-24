@@ -1,0 +1,56 @@
+## .NET ##
+bin/
+obj/
+out/
+
+# Visual Studio / Rider dosyaları
+.vs/
+.vscode/*
+!.vscode/extensions.json
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Build sonuçları
+*.dll
+*.pdb
+*.cache
+
+## Veritabanı ##
+*.db
+*.db-shm
+*.db-wal
+app.db
+
+## Docker ##
+# Grafana/Prometheus/Loki container'larının çalışırken oluşturduğu
+# yerel veri klasörleri varsa (volume mount edilmiş şekilde) burada tutulmasın
+grafana-data/
+prometheus-data/
+loki-data/
+
+## Hassas / ortam bazlı ayarlar ##
+# appsettings.json içindeki JWT Key gibi gizli bilgiler gerçek bir
+# projede burada tutulmaz. appsettings.Development.json genelde
+# kişisel/yerel ayarlar içerir, o yüzden dışarıda bırakıyoruz.
+appsettings.Development.json
+appsettings.Local.json
+*.env
+.env
+
+## İşletim sistemi dosyaları ##
+.DS_Store
+Thumbs.db
+
+## NuGet ##
+*.nupkg
+**/packages/*
+!**/packages/build/
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
+## Test sonuçları ##
+[Tt]est[Rr]esult*/
+*.trx

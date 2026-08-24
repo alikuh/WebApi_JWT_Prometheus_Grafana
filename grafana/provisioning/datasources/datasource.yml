@@ -1,0 +1,15 @@
+apiVersion: 1
+
+datasources:
+  - name: mywebapi-prometheus
+    type: prometheus
+    access: proxy
+    url: http://mywebapi-prometheus:9090
+    isDefault: true
+    editable: true
+    
+  - name: mywebapi-loki
+    type: loki
+    access: proxy
+    url: http://mywebapi-loki:3100
+    editable: true
